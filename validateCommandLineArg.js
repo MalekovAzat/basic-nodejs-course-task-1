@@ -60,21 +60,34 @@ function validateArgv(argv) {
   // check rest args
   const inputArgIndex = argv.indexOf("-i") || argv.indexOf("--input");
   if (inputArgIndex !== -1) {
-    const inputpath = argv[inputArgIndex + 1];
-    if (!fs.existsSync(inputpath)) {
+    const inputPath = argv[inputArgIndex + 1];
+    if (!fs.existsSync(inputPath)) {
       throw new CustomException(
         "Provided file path is not exist for input file\n"
       );
     }
+    try {
+      if (!fs.accessSync(inputPath, fs.constants.R_OK)) {
+      }
+    } catch (e) {
+      throw new CustomException(`No read access to ${inputPath}\n`);
+    }
   }
+
   const ouptutArgIndex = argv.indexOf("-o") || argv.indexOf("--output");
   if (ouptutArgIndex !== -1) {
     const ouputPath = argv[ouptutArgIndex + 1];
-
     if (!fs.existsSync(ouputPath)) {
       throw new CustomException(
         "Provided file path is not exist for output file\n"
       );
+    }
+
+    try {
+      if (!fs.accessSync(ouputPath, fs.constants.W_OK)) {
+      }
+    } catch (e) {
+      throw new CustomException(`No write access to ${ouputPath}\n`);
     }
   }
 }
