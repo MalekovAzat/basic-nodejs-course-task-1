@@ -4,10 +4,22 @@ const fs = require("fs");
 class CustomInputStream extends Readable {
   constructor(filename) {
     super();
-    if (filename !== "") {
-      this.fd = fs.openSync(filename);
+    this.filename = filename;
+  }
+
+  _construct(callback) {
+    if (this.filename !== "") {
+      fs.open(this.filename, (err, fd) => {
+        if (err) {
+          callback(err);
+        } else {
+          this.fd = fd;
+          callback();
+        }
+      });
     } else {
       this.fd = 0;
+      callback();
     }
   }
 

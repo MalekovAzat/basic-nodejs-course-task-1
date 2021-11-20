@@ -4,22 +4,23 @@ const fs = require("fs");
 class CustonOutputStream extends Writable {
   constructor(filename) {
     super();
-    if (filename) {
-      this.fd = fs.openSync(filename, "a");
-    } else {
-      this.fd = 1;
-    }
+    this.filename = filename;
   }
 
   _construct(callback) {
-    fs.open(this.filename, (err, fd) => {
-      if (err) {
-        callback(err);
-      } else {
-        this.fd = fd;
-        callback();
-      }
-    });
+    if (this.filename !== "") {
+      fs.open(this.filename, "a", (err, fd) => {
+        if (err) {
+          callback(err);
+        } else {
+          this.fd = fd;
+          callback();
+        }
+      });
+    } else {
+      this.fd = 1;
+      callback();
+    }
   }
 
   _write(chunk, encoding, callback) {
