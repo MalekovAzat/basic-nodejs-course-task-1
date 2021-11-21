@@ -1,4 +1,5 @@
 const { spawn } = require("child_process");
+const fs = require("fs");
 
 describe("Check of the CaesarCli file", () => {
   it("Should check user passes the same cli argument twice", (done) => {
@@ -64,7 +65,7 @@ describe("Check of the CaesarCli file", () => {
       "-c",
       "A",
       "-o",
-      "./output.txt",
+      "./asoutput.txt",
     ]);
 
     ls.stdout.on("data", (data) => {});
@@ -129,10 +130,20 @@ describe("Check of the CaesarCli file", () => {
   });
 
   it("Should check User passes correct sequence of symbols as argument for --config that matches regular expression - No errors case-2 from task", (done) => {
+    fs.writeFileSync(
+      "./input1.txt",
+      'This is secret. Message about "_" symbol!',
+      { encoding: "utf8" }
+    );
+    fs.writeFileSync("./output1.txt", "");
     const ls = spawn("node", [
       "./caesar_cli_tool_task_1/caesar_cli.js",
       "-c",
       "C1-C1-R0-A",
+      "-i",
+      "./input1.txt",
+      "-o",
+      "./output1.txt",
     ]);
 
     ls.stdin.write('This is secret. Message about "_" symbol!');
@@ -147,6 +158,15 @@ describe("Check of the CaesarCli file", () => {
       data = data.toString("utf8");
     });
 
+    setTimeout(() => {
+      fs.readFile("./output1.txt", { encoding: "utf8" }, (data) => {
+        data = data.toString("utf8");
+        data.toString("utf8");
+        expect(data).toBe('Myxn xn nbdobm. Tbnnfzb ferlm "_" nhteru!');
+        done();
+      });
+    }, 1000);
+
     ls.on("close", (code) => {
       expect(code).toBe(0);
       done();
@@ -154,23 +174,33 @@ describe("Check of the CaesarCli file", () => {
   });
 
   it("Should check User passes correct sequence of symbols as argument for --config that matches regular expression - No errors case 3 from task", (done) => {
+    fs.writeFileSync(
+      "./input2.txt",
+      'This is secret. Message about "_" symbol!',
+      { encoding: "utf8" }
+    );
+    fs.writeFileSync("./output2.txt", "");
     const ls = spawn("node", [
       "./caesar_cli_tool_task_1/caesar_cli.js",
       "-c",
       "A-A-A-R1-R0-R0-R0-C1-C1-A",
+      "-i",
+      "./input2.txt",
+      "-o",
+      "./output2.txt",
     ]);
 
     ls.stdin.write('This is secret. Message about "_" symbol!');
     ls.stdin.end();
 
-    ls.stdout.on("data", (data) => {
-      data = data.toString("utf8");
-      expect(data).toBe('Hvwg wg gsqfsh. Asggous opcih "_" gmapcz!');
-    });
-
-    ls.stderr.on("data", (data) => {
-      data = data.toString("utf8");
-    });
+    setTimeout(() => {
+      fs.readFile("./output2.txt", { encoding: "utf8" }, (data) => {
+        data = data.toString("utf8");
+        data.toString("utf8");
+        expect(data).toBe('Myxn xn nbdobm. Tbnnfzb ferlm "_" nhteru!');
+        done();
+      });
+    }, 1000);
 
     ls.on("close", (code) => {
       expect(code).toBe(0);
@@ -179,19 +209,33 @@ describe("Check of the CaesarCli file", () => {
   });
 
   it("Should check User passes correct sequence of symbols as argument for --config that matches regular expression - No errors case 4 from task", (done) => {
+    fs.writeFileSync(
+      "./input3.txt",
+      'This is secret. Message about "_" symbol!',
+      { encoding: "utf8" }
+    );
+    fs.writeFileSync("./output3.txt", "");
     const ls = spawn("node", [
       "./caesar_cli_tool_task_1/caesar_cli.js",
       "-c",
       "C1-R1-C0-C0-A-R0-R1-R1-A-C1",
+      "-i",
+      "./input3.txt",
+      "-o",
+      "./output3.txt",
     ]);
 
     ls.stdin.write('This is secret. Message about "_" symbol!');
     ls.stdin.end();
 
-    ls.stdout.on("data", (data) => {
-      data = data.toString("utf8");
-      expect(data).toBe('This is secret. Message about "_" symbol!');
-    });
+    setTimeout(() => {
+      fs.readFile("./output3.txt", { encoding: "utf8" }, (data) => {
+        data = data.toString("utf8");
+        data.toString("utf8");
+        expect(data).toBe('Myxn xn nbdobm. Tbnnfzb ferlm "_" nhteru!');
+        done();
+      });
+    }, 1000);
 
     ls.stderr.on("data", (data) => {
       data = data.toString("utf8");

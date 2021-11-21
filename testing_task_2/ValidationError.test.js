@@ -1,7 +1,11 @@
-const { execSync } = require("child_process");
+const { spawn } = require("child_process");
 const validateArgv = require("../caesar_cli_tool_task_1/validateCommandLineArg");
 
 describe("ValudationErrorTool check count of command line attributes", () => {
+  beforeAll(() => {
+    spawn("chmod", ["a-rw", "./caesar_cli_tool_task_1/output3.txt"]);
+  }, 1000);
+
   it("Not enought '--config' or '-c' generate ValidateError", () => {
     const commandLineArgs = ["-i", "./input.tx", "-o", "./output.txt"];
     let error = null;

@@ -15,6 +15,7 @@ describe("Custom readable stream", () => {
 
     writableStream.write('This is secret. Message about "_" symbol!');
     writableStream.end();
+
     fs.readFile(pathToFile, "utf8", (err, data) => {
       if (err) {
         console.error(err);
