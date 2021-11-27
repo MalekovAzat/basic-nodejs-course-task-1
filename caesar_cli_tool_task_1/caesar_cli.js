@@ -5,17 +5,21 @@ const CustomOutputStream = require("./CustonOutputStream");
 
 const { pipeline } = require("stream");
 
-try {
-  Validator(process.argv);
-} catch (err) {
-  process.stderr.write(err.message);
-  process.exit(1);
+function checkArgs(args) {
+  try {
+    Validator(args);
+  } catch (err) {
+    process.stderr.write(err.message);
+    process.exit(1);
+  }
 }
+
+checkArgs(process.argv);
 
 const configFlagIndex = process.argv.indexOf("-c") || argv.indexOf("--config");
 const config = process.argv[configFlagIndex + 1].split("-");
 
-const transformStreamList = config.map((conf) => {
+function createTransforScramblerStream(conf) {
   let config = {};
   if (conf.charAt(0) === "C") {
     config = {
@@ -34,7 +38,11 @@ const transformStreamList = config.map((conf) => {
     };
   }
   return new TransformScrambler(config);
-});
+}
+
+const transformStreamList = config.map((conf) =>
+  createTransforScramblerStream(conf)
+);
 
 const inputArgIndex =
   process.argv.indexOf("-i") || process.argv.indexOf("--input");
@@ -49,3 +57,8 @@ const outputStream = new CustomOutputStream(
 );
 
 pipeline(inputStream, ...transformStreamList, outputStream, (err) => {});
+
+module.exports = {
+  checkArgs,
+  createTransforScramblerStream,
+};

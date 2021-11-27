@@ -1,0 +1,20 @@
+{
+  "dependencies": {
+    "jest": "^27.3.1"
+  },
+  "jest": {
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "./caesar_cli_tool_task_1/**/*.js",
+      "!./caesar_cli_tool_task_1/caesar_cli.js"
+    ],
+    "coverageReporters": [
+      "json",
+      "html"
+    ]
+  },
+  "scripts": {
+    "test": "jest",
+    "test-coverage": "jest --coverage"
+  }
+}
